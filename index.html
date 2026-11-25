@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>知常中医 · 现代人一看就懂的中医生活与功法指南</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --bg-paper: #FAF8F5;
+      --ink-primary: #1E2923;
+      --jade-green: #2C5E4F;
+      --ochre-gold: #B8860B;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      background-color: var(--bg-paper);
+      color: var(--ink-primary);
+    }
+    .pulse-point {
+      animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+    }
+    @keyframes pulse-ring {
+      0% { transform: scale(0.9); opacity: 0.95; }
+      50% { transform: scale(1.35); opacity: 0.55; }
+      100% { transform: scale(0.9); opacity: 0.95; }
+    }
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: #F1EDE4; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #C5BDB0; border-radius: 4px; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased">
+
+  <!-- 顶部导航栏 -->
+  <header class="bg-[#F4F0E8]/95 backdrop-blur border-b border-[#E2DCD0] sticky top-0 z-40 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-[#2C5E4F] flex items-center justify-center text-[#FAF8F5] font-serif font-bold text-xl shadow-sm">
+          医
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-lg sm:text-xl font-bold text-[#1E2923] tracking-wide">知常中医</h1>
+            <span class="text-[11px] font-medium bg-[#2C5E4F]/10 text-[#2C5E4F] border border-[#2C5E4F]/20 px-2 py-0.5 rounded-full">
+              明医理 · 懂导引 · 实用图解版
+            </span>
+          </div>
+          <p class="text-xs text-[#5A655F] mt-0.5">不讲玄虚废话，用现代人听得懂的大白话讲透病理、穴位与八部金刚功</p>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-2">
+        <button onclick="stopAllSpeech()" id="globalStopAudioBtn" class="hidden text-xs bg-rose-600 text-white font-medium px-3 py-1.5 rounded-full shadow-sm animate-pulse">
+          ⏹️ 停止语音讲解
+        </button>
+        <div class="text-[11px] text-[#7A6A53] bg-[#EFE9DC] border border-[#DFD6C5] px-3 py-1.5 rounded-full">
+          🌿 重导引 · 治未病 · 手机电脑双端适配
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主体容器 -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+    <!-- 核心四大板块导航卡片 -->
+    <nav class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      <button onclick="switchSection('illness')" id="nav-illness" class="nav-card text-left p-4 rounded-2xl border-2 transition-all bg-white shadow-sm">
+        <div class="flex items-center justify-between">
+          <span class="text-sm sm:text-base font-bold text-[#1E2923]">1. 常见病痛透彻拆解</span>
+          <span class="text-lg">🩺</span>
+        </div>
+        <p class="text-xs text-[#647069] mt-1">风寒/风热感冒、皮肤湿疹痘痘成因与食疗护理</p>
+      </button>
+
+      <button onclick="switchSection('acupoints')" id="nav-acupoints" class="nav-card text-left p-4 rounded-2xl border-2 transition-all bg-white shadow-sm">
+        <div class="flex items-center justify-between">
+          <span class="text-sm sm:text-base font-bold text-[#1E2923]">2. 经络穴位精准图鉴</span>
+          <span class="text-lg">📍</span>
+        </div>
+        <p class="text-xs text-[#647069] mt-1">高清矢量定位红点图 + 骨度分寸 + 按揉手法</p>
+      </button>
+
+      <button onclick="switchSection('jingang')" id="nav-jingang" class="nav-card text-left p-4 rounded-2xl border-2 transition-all bg-white shadow-sm">
+        <div class="flex items-center justify-between">
+          <span class="text-sm sm:text-base font-bold text-[#1E2923]">3. 八部金刚功跟练馆</span>
+          <span class="text-lg">🧘</span>
+        </div>
+        <p class="text-xs text-[#647069] mt-1">道家张至顺传承全八式动作要领 + 自动跟练计时器</p>
+      </button>
+
+      <button onclick="switchSection('triage')" id="nav-triage" class="nav-card text-left p-4 rounded-2xl border-2 transition-all bg-white shadow-sm">
+        <div class="flex items-center justify-between">
+          <span class="text-sm sm:text-base font-bold text-[#1E2923]">4. 今日症状辨证自测</span>
+          <span class="text-lg">🧭</span>
+        </div>
+        <p class="text-xs text-[#647069] mt-1">勾选当前不适表现，给出对应茶饮、穴位与练功建议</p>
+      </button>
+    </nav>
+
+    <!-- ===================================================================== -->
+    <!-- 板块 1：常见病痛透彻拆解（感冒 / 皮肤病 / 脾胃失眠） -->
+    <!-- ===================================================================== -->
+    <section id="sec-illness" class="page-section space-y-5">
+      <!-- 分类过滤标签 -->
+      <div class="flex flex-wrap items-center justify-between gap-3 bg-white p-4 rounded-2xl border border-[#E5DFD3] shadow-sm">
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="text-xs font-bold text-[#5A655F]">按病症分类查看：</span>
+          <button onclick="filterIllness('all')" class="illness-filter-btn active-filter text-xs px-3 py-1.5 rounded-lg font-medium bg-[#2C5E4F] text-white">全部科普</button>
+          <button onclick="filterIllness('cold')" class="illness-filter-btn text-xs px-3 py-1.5 rounded-lg font-medium bg-[#F4F0E8] text-[#3D4742] hover:bg-[#E7E0D2]">普通感冒（寒热辨证）</button>
+          <button onclick="filterIllness('skin')" class="illness-filter-btn text-xs px-3 py-1.5 rounded-lg font-medium bg-[#F4F0E8] text-[#3D4742] hover:bg-[#E7E0D2]">常见皮肤问题（湿疹/荨麻疹/痘痘）</button>
+          <button onclick="filterIllness('daily')" class="illness-filter-btn text-xs px-3 py-1.5 rounded-lg font-medium bg-[#F4F0E8] text-[#3D4742] hover:bg-[#E7E0D2]">脾胃湿气与失眠</button>
+        </div>
+        <span class="text-xs text-[#8C7A5B]">💡 点击卡片右上角可听「AI 白话语音讲解」或看视频拆解</span>
+      </div>
+
+      <!-- 病症卡片网格 -->
+      <div id="illnessCardsGrid" class="grid grid-cols-1 lg:grid-cols-2 gap-5"></div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- 板块 2：经络穴位精准图鉴（高清 SVG 定位图 + 脉冲红点 + 手法禁忌） -->
+    <!-- ===================================================================== -->
+    <section id="sec-acupoints" class="page-section hidden space-y-5">
+      <div class="bg-white p-4 rounded-2xl border border-[#E5DFD3] shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h2 class="text-base font-bold text-[#1E2923]">随身经络穴位精准定位图鉴</h2>
+          <p class="text-xs text-[#647069] mt-0.5">点击左侧穴位列表，右侧实时展示解剖定位图（红色脉冲点即穴位所在）、找穴口诀与按揉手法。</p>
+        </div>
+        <div class="flex flex-wrap gap-1.5">
+          <button onclick="filterAcupoints('all')" class="acu-filter text-xs px-2.5 py-1 rounded-lg bg-[#2C5E4F] text-white font-medium">全部常用穴</button>
+          <button onclick="filterAcupoints('cold')" class="acu-filter text-xs px-2.5 py-1 rounded-lg bg-[#F4F0E8] text-[#3D4742]">感冒鼻塞头痛</button>
+          <button onclick="filterAcupoints('stomach')" class="acu-filter text-xs px-2.5 py-1 rounded-lg bg-[#F4F0E8] text-[#3D4742]">脾胃胀气消化</button>
+          <button onclick="filterAcupoints('sleep')" class="acu-filter text-xs px-2.5 py-1 rounded-lg bg-[#F4F0E8] text-[#3D4742]">失眠心悸疲劳</button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        <!-- 左侧：穴位选择列表 (5列) -->
+        <div id="acupointList" class="lg:col-span-5 space-y-2.5"></div>
+
+        <!-- 右侧：穴位高清矢量图解 + 透彻讲解卡片 (7列) -->
+        <div id="acupointDetailCard" class="lg:col-span-7 bg-white rounded-2xl border border-[#E5DFD3] p-6 shadow-sm sticky top-24"></div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- 板块 3：八部金刚功跟练馆（道家张至顺传承全八式 + 自动跟练计时器） -->
+    <!-- ===================================================================== -->
+    <section id="sec-jingang" class="page-section hidden space-y-5">
+      <!-- 顶部功法总纲与跟练控制器 -->
+      <div class="bg-gradient-to-r from-[#23483D] to-[#2C5E4F] text-[#FAF8F5] rounded-2xl p-6 shadow-md">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div class="space-y-1.5 max-w-2xl">
+            <div class="inline-flex items-center gap-2 bg-white/15 px-3 py-1 rounded-full text-xs">
+              <span>道家全真龙门派 · 张至顺道长公开传授</span>
+            </div>
+            <h2 class="text-xl sm:text-2xl font-bold tracking-wide">八部金刚功 · 全套动作要领与跟练</h2>
+            <p class="text-xs sm:text-sm text-emerald-100/90 leading-relaxed">
+              金刚功外练筋骨皮、内疏五脏气。讲究<strong>“刚中有柔、用力不用拙力、动作到位即停”</strong>。建议每天清晨太阳刚出时面向东方练习，练完切忌立刻喝冷水或吹冷风。
+            </p>
+          </div>
+
+          <!-- 交互式跟练计时器控制面板 -->
+          <div class="bg-black/25 backdrop-blur rounded-xl p-4 border border-white/15 min-w-[270px] space-y-3">
+            <div class="flex items-center justify-between text-xs">
+              <span class="text-emerald-200 font-semibold">⏱️ 智能节拍跟练器</span>
+              <select id="jingangRoundsSelect" class="bg-white/15 text-white border border-white/20 rounded px-2 py-0.5 text-xs outline-none">
+                <option value="3" class="text-slate-900">每式 3 遍（体验版约3分钟）</option>
+                <option value="5" selected class="text-slate-900">每式 5 遍（日常版约5分钟）</option>
+                <option value="9" class="text-slate-900">每式 9 遍（完整版约9分钟）</option>
+              </select>
+            </div>
+            <div id="jingangTimerStatus" class="text-center py-2 bg-black/20 rounded-lg">
+              <div id="currentMoveTitle" class="text-sm font-bold text-amber-300">准备就绪 · 点击开始</div>
+              <div id="currentMoveCount" class="text-xs text-emerald-100 mt-0.5">自动语音报幕 + 呼吸节奏提示</div>
+            </div>
+            <div class="flex gap-2">
+              <button onclick="startJingangPractice()" id="startJingangBtn" class="flex-1 bg-[#D4A017] hover:bg-[#B8860B] text-slate-950 font-bold text-xs py-2 rounded-lg transition">
+                ▶️ 开始语音带练
+              </button>
+              <button onclick="stopJingangPractice()" id="stopJingangBtn" class="px-3 py-2 bg-white/15 hover:bg-white/25 text-white text-xs rounded-lg transition">
+                停止
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 八部金刚功全八式分解卡片 -->
+      <div id="jingangMovesGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- 板块 4：今日症状辨证自测小助手 -->
+    <!-- ===================================================================== -->
+    <section id="sec-triage" class="page-section hidden space-y-5">
+      <div class="bg-white rounded-2xl border border-[#E5DFD3] p-6 shadow-sm space-y-5">
+        <div class="border-b border-[#EFEAE0] pb-4">
+          <h2 class="text-base sm:text-lg font-bold text-[#1E2923]">🧭 现代人日常不适辨证自测（不瞎吃药版）</h2>
+          <p class="text-xs text-[#647069] mt-1">勾选您今天最明显的 1~4 个身体信号，系统用传统中医辨证逻辑帮您理清原因，并推荐对应的食疗茶饮、按揉穴位与练功招式。</p>
+        </div>
+
+        <div class="space-y-4">
+          <div>
+            <div class="text-xs font-bold text-[#2C5E4F] mb-2">一、感冒 / 咽喉呼吸信号：</div>
+            <div class="flex flex-wrap gap-2" id="symptomGroupCold">
+              <label class="symptom-chip cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#DCD5C7] bg-[#FAF8F5] text-xs">
+                <input type="checkbox" value="怕冷明显、穿很多还打寒战" class="symptom-check accent-[#2C5E4F]" /> 怕冷明显、打寒战
+              </label>
+              <label class="symptom-chip cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#DCD5C7] bg-[#FAF8F5] text-xs">
+                <input type="checkbox" value="流清鼻涕（像清水一样）" class="symptom-check accent-[#2C5E4F]" /> 流清鼻涕（像清水）
+              </label>
+              <label class="symptom-chip cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#DCD5C7] bg-[#FAF8F5] text-xs">
+                <input type="checkbox" value="后脖子发紧、浑身酸痛无汗" class="symptom-check accent-[#2C5E4F]" /> 后脖子发紧、无汗
+              </label>
+              <label class="symptom-chip cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#DCD5C7] bg-[#FAF8F5] text-xs">
+                <input type="checkbox" value="嗓子红肿干痛、咽口水都疼" class="symptom-check accent-[#2C5E4F]" /> 嗓子红肿干痛
+              </label>
+              <label class="symptom-chip cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#DCD5C7] bg-[#FAF8F5] text-xs">
+                <input type="checkbox" value="流黄浓涕、咳黄痰、口干想喝冷水" class="symptom-check accent-[#2C5E4F]" /> 流黄涕、口干想喝水
+              </label>
+            </div>
+          </div>
+
+          <div>
+            <div class="text-xs font-bold text-[#2C5E4F] mb-2">二、皮肤与湿热信号：</div>
+            <div class="flex flex-wrap gap-2">
+              <label class="symptom-chip cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#DCD5C7] bg-[#FAF8F5] text-xs">
+                <input type="checkbox" value="皮肤起红疹、瘙痒、抓破渗水（湿疹倾向）" class="symptom-check accent-[#2C5E4F]" /> 皮肤起红疹瘙痒（湿疹）
+              </label>
+              <label class="symptom-chip cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#DCD5C7] bg-[#FAF8F5] text-xs">
+                <input type="checkbox" value="吹风就起风团、此起彼伏（荨麻疹倾向）" class="symptom-check accent-[#2C5E4F]" /> 吹风起风团（荨麻疹）
+              </label>
+              <label class="symptom-chip cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#DCD5C7] bg-[#FAF8F5] text-xs">
+                <input type="checkbox" value="脸部出油多、下巴或额头反复长红肿痘痘" class="symptom-check accent-[#2C5E4F]" /> 脸油、下巴额头反复长痘
+              </label>
+            </div>
+          </div>
+
+          <div>
+            <div class="text-xs font-bold text-[#2C5E4F] mb-2">三、脾胃与作息信号：</div>
+            <div class="flex flex-wrap gap-2">
+              <label class="symptom-chip cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#DCD5C7] bg-[#FAF8F5] text-xs">
+                <input type="checkbox" value="饭后胃胀不消化、大便粘马桶、舌苔厚腻" class="symptom-check accent-[#2C5E4F]" /> 饭后胃胀、大便粘马桶
+              </label>
+              <label class="symptom-chip cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#DCD5C7] bg-[#FAF8F5] text-xs">
+                <input type="checkbox" value="入睡困难、多梦易醒、心烦焦虑" class="symptom-check accent-[#2C5E4F]" /> 入睡困难、多梦易醒
+              </label>
+              <label class="symptom-chip cursor-pointer inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#DCD5C7] bg-[#FAF8F5] text-xs">
+                <input type="checkbox" value="久坐肩颈僵硬、腰酸背痛" class="symptom-check accent-[#2C5E4F]" /> 久坐肩颈僵硬、腰酸
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-2 flex flex-wrap items-center gap-3">
+          <button onclick="analyzeSymptoms()" class="bg-[#2C5E4F] hover:bg-[#21473B] text-white font-bold text-xs sm:text-sm px-6 py-2.5 rounded-xl shadow-sm transition">
+            🔍 生成今日辨证调理方案
+          </button>
+          <button onclick="resetSymptoms()" class="text-xs text-[#647069] hover:underline">清空重选</button>
+        </div>
+
+        <!-- 辨证结果输出区 -->
+        <div id="triageResultBox" class="hidden rounded-2xl bg-[#F4F0E8] border border-[#DCD3C2] p-5 space-y-4"></div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- 底部视频讲解挂载体 & 合规免责声明 -->
+    <!-- ===================================================================== -->
+    <section class="bg-white rounded-2xl border border-[#E5DFD3] p-5 shadow-sm space-y-3">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#EFEAE0] pb-2.5">
+        <div class="flex items-center gap-2">
+          <span class="text-base">🎬</span>
+          <h3 class="text-sm font-bold text-[#1E2923]">AI 视频讲解专栏（支持绑定 B站 / 外部视频链接）</h3>
+        </div>
+        <span class="text-[11px] text-[#7A6A53]">纯静态轻量挂载，不占用 GitHub 仓库体积</span>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+        <div class="p-4 rounded-xl bg-[#FAF8F5] border border-[#E5DFD3] space-y-2">
+          <div class="font-bold text-[#2C5E4F]">视频 01：3分钟分清风寒与风热感冒</div>
+          <p class="text-[#647069] leading-relaxed">讲透为什么寒证喝了板蓝根会越喝越重，教你用厨房里的生姜、葱白和薄荷精准应对。</p>
+          <button onclick="speakText('风寒感冒的本质是寒气把皮肤毛孔锁死了，身体想发热却发不出来，所以怕冷、流清鼻涕。这时候必须用生姜红糖水或葱白水把毛孔打开、微微出汗；千万不能一上来就喝寒凉的清热解毒口服液，否则等于雪上加霜。')"
+            class="inline-flex items-center gap-1 text-[#2C5E4F] font-semibold hover:underline">
+            🔊 立即听这段透彻讲稿（AI 语音）
+          </button>
+        </div>
+        <div class="p-4 rounded-xl bg-[#FAF8F5] border border-[#E5DFD3] space-y-2">
+          <div class="font-bold text-[#2C5E4F]">视频 02：皮肤湿疹与荨麻疹的体内根源</div>
+          <p class="text-[#647069] leading-relaxed">皮肤只是身体的“排污窗口”。脾胃运化不了的水湿加上郁热往皮肤外顶，就是湿疹；风邪钻进血分就是荨麻疹。</p>
+          <button onclick="speakText('很多皮肤病光靠外面涂激素药膏，涂好了又复发，原因在于体内的脾湿和郁热没有排出去。湿疹患者一定要管住嘴，戒掉冰饮、甜腻和海鲜牛羊肉等发物，同时多按揉小腿内侧的阴陵泉和血海穴，帮身体把湿气从大小便排走。')"
+            class="inline-flex items-center gap-1 text-[#2C5E4F] font-semibold hover:underline">
+            🔊 立即听这段透彻讲稿（AI 语音）
+          </button>
+        </div>
+        <div class="p-4 rounded-xl bg-[#FAF8F5] border border-[#E5DFD3] space-y-2">
+          <div class="font-bold text-[#2C5E4F]">视频 03：八部金刚功为什么能打通三焦？</div>
+          <p class="text-[#647069] leading-relaxed">解析第一式“双手插顶利三焦”如何通过极度向上拔伸，把现代人久坐挤压的胸腔与腹腔气机彻底拉开。</p>
+          <button onclick="speakText('现代人天天低头看手机，胸腔和肚子全窝在一起，三焦水道不通，上面上火口腔溃疡，下面手脚冰凉。八部金刚功第一式双手插顶，要求两手五指交叉翻掌极力上托，脚跟提起，这一拔一拉就像把折叠的水管瞬间拉直，五脏六腑的气血立刻上下贯通。')"
+            class="inline-flex items-center gap-1 text-[#2C5E4F] font-semibold hover:underline">
+            🔊 立即听这段透彻讲稿（AI 语音）
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 页脚与医疗合规免责声明 -->
+  <footer class="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 text-xs text-[#6E7872] border-t border-[#E2DCD0] mt-6 space-y-2">
+    <div class="font-semibold text-[#4A544E]">⚠️ 健康科普免责声明：</div>
+    <p class="leading-relaxed">
+      本网站（知常中医）所有内容均属于中医传统文化科普、经络穴位保健与传统导引功法交流，<strong>不构成任何医疗诊断、处方建议或临床治疗依据</strong>。人体体质千差万别，若出现高热不退、呼吸困难、皮肤大面积溃烂或剧烈疼痛等急重症，请务必第一时间前往正规医院就诊。
+    </p>
+  </footer>
+
+  <!-- 核心数据与交互逻辑 -->
+  <script>
+    /********************************************************************
+     * 1. 核心数据仓库：病症透彻拆解库
+     ********************************************************************/
+    const ILLNESS_DATA = [
+      {
+        id: 'cold-wind-cold',
+        category: 'cold',
+        tag: '普通感冒 · 寒证',
+        tagColor: 'bg-sky-100 text-sky-800',
+        title: '风寒感冒：为什么穿再多还是打冷战？',
+        coreLogic: '本质是“寒邪把皮肤毛孔锁死了”。身体想靠升高体温把寒气逼出去，但毛孔闭着出不了汗，所以你会觉得怕冷、浑身肌肉紧绷酸痛、流清水鼻涕。',
+        symptoms: ['明显怕冷、风一吹就打寒战', '流清稀鼻涕（像水一样）、打喷嚏', '后脑勺和脖子发紧、舌苔薄白、基本不出汗'],
+        rightWay: '核心思路是【辛温解表、微微发汗】。用3片带皮生姜 + 2根带须葱白 + 少许红糖煮水趁热喝，喝完盖被子捂出一点微汗（切忌大汗淋漓）即好。配合按揉【风池穴】【大椎穴】。',
+        wrongPitfall: '❌ 千万别喝板蓝根、蒲地蓝、双黄连等苦寒中成药！寒上加寒，会把寒气死死压在肺里，导致咳嗽拖一两个月好不了。'
+      },
+      {
+        id: 'cold-wind-heat',
+        category: 'cold',
+        tag: '普通感冒 · 热证',
+        tagColor: 'bg-amber-100 text-amber-800',
+        title: '风热感冒：一上来就嗓子吞刀片、流黄涕',
+        coreLogic: '本质是“体内存有积热，又感受了温热之邪”，火气直接往上冲到咽喉和鼻腔，把津液烤干了，所以痰和鼻涕都是黄黏的。',
+        symptoms: ['嗓子红肿干痛、咽口水像吞刀片', '流黄浓鼻涕、咳黄黏痰', '发热重、怕冷轻、口干口渴、舌尖红'],
+        rightWay: '核心思路是【辛凉透表、清利咽喉】。可用干桑叶 6g + 菊花 6g + 薄荷 3g（后下）泡水代茶饮；多吃梨子、白萝卜。配合掐按大拇指外侧的【少商穴】和虎口【合谷穴】清泄肺热。',
+        wrongPitfall: '❌ 此时千万别喝姜糖水、别吃羊肉火锅或桂圆红枣，等于往火堆里浇油，扁桃体会迅速化脓。'
+      },
+      {
+        id: 'skin-eczema',
+        category: 'skin',
+        tag: '常见皮肤 · 湿热/脾虚',
+        tagColor: 'bg-emerald-100 text-emerald-800',
+        title: '湿疹反复发作：为什么光涂药膏总是断不了根？',
+        coreLogic: '中医讲“诸痛痒疮，皆属于心；湿性趋下，缠绵难愈”。皮肤只是身体的排污口！脾胃虚弱运化不动体内的水湿，湿气郁久化热，被迫往皮肤表面拱，起水泡、抓破渗黄水就是湿疹。',
+        symptoms: ['皮肤起红斑丘疹、剧烈瘙痒、夜间加重', '抓破后容易渗出黏液、结痂、对称分布', '常伴随舌苔厚腻、大便粘马桶、容易疲倦'],
+        rightWay: '【内健脾祛湿 + 外温和止痒】。日常用炒薏米 + 赤小豆 + 茯苓煮水（健脾利水）；每天按揉小腿内侧【阴陵泉】和【足三里】各5分钟。洗澡水温别太烫（烫水当时解痒，事后更干更痒）。',
+        wrongPitfall: '❌ 严格忌口“发物与生湿之物”：冰奶茶、甜蛋糕、芒果榴莲、海鲜虾蟹、辛辣酒水。体内湿气源头不断，涂再多药膏也只是暂时压制。'
+      },
+      {
+        id: 'skin-urticaria',
+        category: 'skin',
+        tag: '常见皮肤 · 风邪入血',
+        tagColor: 'bg-purple-100 text-purple-800',
+        title: '荨麻疹（风疹块）：吹风就起包，退了又长',
+        coreLogic: '“风者，善行而数变”。荨麻疹起得快、消得也快、位置乱跑，完全符合中医“风邪”的特点。根本原因是卫气不固（皮肤防御门户松了），风寒或风热乘虚钻进血脉里。',
+        symptoms: ['皮肤突然出现大小不一的红色或苍白色风团', '剧烈瘙痒，越抓越成片，消退后不留痕迹', '受凉吹风、熬夜免疫力下降或吃异种蛋白后诱发'],
+        rightWay: '【固表祛风、活血止痒】。中医有句名言“治风先治血，血行风自灭”。日常重点按揉膝盖内上方的【血海穴】和手肘外侧的【曲池穴】；保持作息规律，出汗后及时擦干避风。',
+        wrongPitfall: '❌ 避免在出大汗后直接对着空调冷风吹，或洗完澡没擦干就吹风扇，最易把风寒直接关进皮肤腠理。'
+      },
+      {
+        id: 'skin-acne',
+        category: 'skin',
+        tag: '常见皮肤 · 肺胃郁热',
+        tagColor: 'bg-rose-100 text-rose-800',
+        title: '反复长痘（痤疮）：不同位置对应不同脏腑火气',
+        coreLogic: '长痘绝不只是“脸没洗干净”。额头和眉心长痘多是心肺火旺（熬夜、思虑多）；鼻子周围与口周红肿痘多是脾胃湿热（吃得油腻重口）；下巴两侧反复硬结痘多与肝郁及下焦寒湿有关。',
+        symptoms: ['面部出油旺盛、毛孔粗大', '红肿疼痛的脓包痘，或摸起来硬硬的暗疮', '常伴随口臭、大便干结或粘滞、熬夜后加重'],
+        rightWay: '【清胃降火 + 疏通中焦】。晚上11点前入睡养肝血；用蒲公英（少量）+ 桑叶 + 甘草泡水清肺胃热；每天练习八部金刚功的【调理脾肤需单举】，拉伸脾胃经络。',
+        wrongPitfall: '❌ 切忌用手硬挤三角区痘痘，也别天天用强力皂基洗面奶猛搓，破坏皮肤屏障后反而外油内干、越长越多。'
+      },
+      {
+        id: 'daily-spleen-sleep',
+        category: 'daily',
+        tag: '亚健康调理 · 脾胃与睡眠',
+        tagColor: 'bg-teal-100 text-teal-800',
+        title: '胃不和则卧不安：为什么越累越睡不着？',
+        coreLogic: '现代人很多失眠不是“缺安眠药”，而是“心肾不交”或“胃气不降”。白天久坐不动、晚上吃太晚太饱，胃里食物堵着，阳气下不去潜藏，全浮在头面部，大脑就像关不掉的CPU一样胡思乱想。',
+        symptoms: ['躺下脑子停不下来、入睡超过30分钟', '睡得很浅、做梦多、凌晨1~3点容易醒', '晚饭后肚子发胀、打嗝、手脚心容易发热或脚凉'],
+        rightWay: '【引火归元 + 疏通心包】。晚饭七分饱且睡前3小时不进食；睡前用温热水泡脚15分钟，搓热脚底【涌泉穴】100下，按揉手腕内侧【神门穴】与【内关穴】。',
+        wrongPitfall: '❌ 睡前刷刺激性短视频、喝浓茶咖啡，或刚吃完夜宵立刻平躺睡觉。'
+      }
+    ];
+
+    /********************************************************************
+     * 2. 核心数据仓库：经络穴位库（含高精度内联 SVG 定位图）
+     ********************************************************************/
+    const ACUPOINTS_DATA = [
+      {
+        id: 'hegu',
+        category: 'cold',
+        name: '合谷穴（万能止痛与清热大穴）',
+        meridian: '手阳明大肠经 · 原穴',
+        targetSymptoms: '感冒发热、嗓子痛、头痛、牙痛、鼻塞、面部长痘',
+        locationGuide: '【一秒找准法】把一只手的大拇指和食指张开，另一只手的大拇指第一个关节横纹正对虎口边缘，拇指尖按下去的地方就是合谷穴（约在第二掌骨中点桡侧缘）。按下去会有明显的酸胀感向指尖放射。',
+        method: '用另一侧大拇指指腹垂直用力按揉，力度以产生明显“酸、麻、胀”感为宜，每次左右手各按揉 3~5 分钟。',
+        caution: '⚠️ 重要禁忌：合谷穴有较强的行气活血作用，【孕妇严禁按揉】！',
+        svgDiagram: `
+          <svg viewBox="0 0 320 240" class="w-full h-56 bg-[#FAF8F5] rounded-xl border border-[#E2DCD0]">
+            <!-- 手背轮廓示意 -->
+            <path d="M90,220 L85,150 Q65,135 45,115 Q35,105 45,95 Q55,88 70,105 L95,125 L105,55 Q108,42 118,44 Q126,46 125,60 L122,115 L138,40 Q142,28 152,30 Q160,32 158,48 L152,115 L170,50 Q174,38 183,41 Q191,44 188,58 L178,120 L198,75 Q203,65 211,69 Q218,73 213,86 L192,155 L185,220 Z" fill="#F2E6D8" stroke="#8C7A5B" stroke-width="2"/>
+            <!-- 掌骨辅助虚线 -->
+            <line x1="70" y1="105" x2="108" y2="165" stroke="#B8A992" stroke-width="1.5" stroke-dasharray="4,3"/>
+            <line x1="115" y1="60" x2="115" y2="165" stroke="#B8A992" stroke-width="1.5" stroke-dasharray="4,3"/>
+            <!-- 脉冲红点：合谷穴 -->
+            <circle cx="96" cy="132" r="14" fill="#DC2626" fill-opacity="0.25" class="pulse-point"/>
+            <circle cx="96" cy="132" r="6" fill="#DC2626" stroke="#FFFFFF" stroke-width="2"/>
+            <!-- 标注指引线 -->
+            <line x1="96" y1="132" x2="32" y2="62" stroke="#DC2626" stroke-width="1.5"/>
+            <rect x="10" y="34" width="115" height="28" rx="6" fill="#DC2626"/>
+            <text x="67" y="52" font-size="11" fill="#FFFFFF" font-weight="bold" text-anchor="middle">合谷穴（虎口高处）</text>
+            <text x="160" y="205" font-size="10" fill="#6E7872" text-anchor="middle">手背视图 · 第二掌骨桡侧中点</text>
+          </svg>
+        `
+      },
+      {
+        id: 'fengchi',
+        category: 'cold',
+        name: '风池穴（风邪入脑的必守关口）',
+        meridian: '足少阳胆经',
+        targetSymptoms: '风寒/风热感冒初期、后脑勺头痛、落枕肩颈僵硬、眼睛干涩疲劳',
+        locationGuide: '【一秒找准法】双手掌心捂住耳朵，大拇指自然向后脑勺下方摸去，在枕骨（后脑勺最突出的骨头）下方两侧，两条大筋外侧各有一个明显的凹陷窝，与耳垂基本齐平，按下去酸胀感直冲头顶。',
+        method: '双手大拇指指腹顶住两侧风池穴，其余四指抱住头部固定，向上方（朝向对侧眼睛方向）顶按揉动 3 分钟，直到后脖子微微发热。',
+        caution: '力度适中，切忌用尖锐物猛戳。',
+        svgDiagram: `
+          <svg viewBox="0 0 320 240" class="w-full h-56 bg-[#FAF8F5] rounded-xl border border-[#E2DCD0]">
+            <!-- 后脑勺与颈部轮廓 -->
+            <path d="M95,110 C95,55 225,55 225,110 C225,140 205,158 195,170 L205,220 L115,220 L125,170 C115,158 95,140 95,110 Z" fill="#F2E6D8" stroke="#8C7A5B" stroke-width="2"/>
+            <!-- 颈部两条大筋示意 -->
+            <path d="M142,155 Q140,185 135,215" fill="none" stroke="#C5B49A" stroke-width="4" stroke-linecap="round"/>
+            <path d="M178,155 Q180,185 185,215" fill="none" stroke="#C5B49A" stroke-width="4" stroke-linecap="round"/>
+            <!-- 双侧耳廓示意 -->
+            <path d="M95,105 Q82,105 84,122 Q86,138 97,135" fill="#F2E6D8" stroke="#8C7A5B" stroke-width="2"/>
+            <path d="M225,105 Q238,105 236,122 Q234,138 223,135" fill="#F2E6D8" stroke="#8C7A5B" stroke-width="2"/>
+            <!-- 左右风池穴红点 -->
+            <circle cx="128" cy="148" r="12" fill="#DC2626" fill-opacity="0.25" class="pulse-point"/>
+            <circle cx="128" cy="148" r="5.5" fill="#DC2626" stroke="#FFFFFF" stroke-width="2"/>
+            <circle cx="192" cy="148" r="12" fill="#DC2626" fill-opacity="0.25" class="pulse-point"/>
+            <circle cx="192" cy="148" r="5.5" fill="#DC2626" stroke="#FFFFFF" stroke-width="2"/>
+            <!-- 指引标签 -->
+            <line x1="128" y1="148" x2="65" y2="175" stroke="#DC2626" stroke-width="1.5"/>
+            <rect x="10" y="165" width="98" height="26" rx="6" fill="#DC2626"/>
+            <text x="59" y="182" font-size="11" fill="#FFFFFF" font-weight="bold" text-anchor="middle">风池穴（双侧）</text>
+            <text x="160" y="36" font-size="10" fill="#6E7872" text-anchor="middle">后脑勺视图 · 枕骨下大筋外侧凹陷（平耳垂）</text>
+          </svg>
+        `
+      },
+      {
+        id: 'yingxiang',
+        category: 'cold',
+        name: '迎香穴（鼻塞流涕一按就通）',
+        meridian: '手阳明大肠经',
+        targetSymptoms: '感冒鼻塞、过敏性鼻炎打喷嚏、流清涕或黄涕、嗅觉减退',
+        locationGuide: '【一秒找准法】在面部，鼻翼外缘中点旁开约 0.5 寸（半个大拇指宽度），正好落在鼻唇沟（法令纹）里面。',
+        method: '用左右手食指指腹分别按在两侧迎香穴上，先点按 1 分钟，再顺着鼻梁两侧上下快速搓热（一直搓到鼻翼发烫），鼻子瞬间通气。',
+        caution: '面部皮肤较薄，搓热时避免指甲刮伤皮肤。',
+        svgDiagram: `
+          <svg viewBox="0 0 320 240" class="w-full h-56 bg-[#FAF8F5] rounded-xl border border-[#E2DCD0]">
+            <!-- 面部中下部示意 -->
+            <path d="M90,40 Q90,190 160,210 Q230,190 230,40" fill="#F2E6D8" stroke="#8C7A5B" stroke-width="2"/>
+            <!-- 眉毛与眼睛 -->
+            <path d="M112,72 Q128,65 142,72" fill="none" stroke="#8C7A5B" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M178,72 Q192,65 208,72" fill="none" stroke="#8C7A5B" stroke-width="2.5" stroke-linecap="round"/>
+            <ellipse cx="127" cy="86" rx="11" ry="5" fill="#FFFFFF" stroke="#8C7A5B" stroke-width="1.5"/>
+            <ellipse cx="193" cy="86" rx="11" ry="5" fill="#FFFFFF" stroke="#8C7A5B" stroke-width="1.5"/>
+            <!-- 鼻子与鼻翼 -->
+            <path d="M160,82 L152,126 Q142,134 148,138 Q160,141 172,138 Q178,134 168,126 L160,82" fill="none" stroke="#8C7A5B" stroke-width="2"/>
+            <!-- 法令纹 -->
+            <path d="M142,124 Q130,148 132,172" fill="none" stroke="#C5B49A" stroke-width="1.5" stroke-dasharray="3,2"/>
+            <path d="M178,124 Q190,148 188,172" fill="none" stroke="#C5B49A" stroke-width="1.5" stroke-dasharray="3,2"/>
+            <!-- 嘴巴 -->
+            <path d="M140,168 Q160,176 180,168" fill="none" stroke="#8C7A5B" stroke-width="2"/>
+            <!-- 迎香穴红点 -->
+            <circle cx="139" cy="133" r="10" fill="#DC2626" fill-opacity="0.25" class="pulse-point"/>
+            <circle cx="139" cy="133" r="4.5" fill="#DC2626" stroke="#FFFFFF" stroke-width="1.5"/>
+            <circle cx="181" cy="133" r="10" fill="#DC2626" fill-opacity="0.25" class="pulse-point"/>
+            <circle cx="181" cy="133" r="4.5" fill="#DC2626" stroke="#FFFFFF" stroke-width="1.5"/>
+            <!-- 标注 -->
+            <line x1="181" y1="133" x2="238" y2="112" stroke="#DC2626" stroke-width="1.5"/>
+            <rect x="210" y="88" width="98" height="26" rx="6" fill="#DC2626"/>
+            <text x="259" y="105" font-size="11" fill="#FFFFFF" font-weight="bold" text-anchor="middle">迎香穴（鼻翼旁）</text>
+          </svg>
+        `
+      },
+      {
+        id: 'zusanli',
+        category: 'stomach',
+        name: '足三里（健脾祛湿、补气第一大穴）',
+        meridian: '足阳明胃经 · 合穴',
+        targetSymptoms: '胃胀胃痛、消化不良、体内湿气重（湿疹/大便粘）、免疫力低下、腿脚乏力',
+        locationGuide: '【一秒找准法】坐着屈膝90度，摸到膝盖外侧下方有一个凹陷（外膝眼），把同侧手的四根手指并拢横放在外膝眼下方，小指下缘所对应的地方，再往小腿胫骨外侧移开约一横指（约1.5厘米）处就是足三里。',
+        method: '用大拇指指腹用力按压揉动，酸胀感越明显效果越好，每天两侧各按揉 5 分钟（民间常说“常按足三里，胜吃老母鸡”）。',
+        caution: '饭后半小时内不宜过重猛按，日常随时可按。',
+        svgDiagram: `
+          <svg viewBox="0 0 320 240" class="w-full h-56 bg-[#FAF8F5] rounded-xl border border-[#E2DCD0]">
+            <!-- 屈膝小腿外侧轮廓 -->
+            <path d="M70,50 L155,60 Q180,65 182,92 L175,215 L122,215 L125,112 L70,105 Z" fill="#F2E6D8" stroke="#8C7A5B" stroke-width="2"/>
+            <!-- 髌骨与外膝眼示意 -->
+            <circle cx="168" cy="76" r="11" fill="#E8D7C3" stroke="#8C7A5B" stroke-width="1.5"/>
+            <circle cx="168" cy="94" r="4" fill="#8C7A5B"/>
+            <text x="212" y="96" font-size="10" fill="#6E7872">外膝眼</text>
+            <line x1="173" y1="94" x2="195" y2="94" stroke="#8C7A5B" stroke-width="1"/>
+            <!-- 四横指距离标尺 -->
+            <line x1="188" y1="94" x2="188" y2="146" stroke="#2C5E4F" stroke-width="1.5" stroke-dasharray="3,2"/>
+            <text x="225" y="123" font-size="10" fill="#2C5E4F" font-weight="bold">四横指(3寸)</text>
+            <!-- 足三里红点 -->
+            <circle cx="160" cy="146" r="12" fill="#DC2626" fill-opacity="0.25" class="pulse-point"/>
+            <circle cx="160" cy="146" r="5.5" fill="#DC2626" stroke="#FFFFFF" stroke-width="2"/>
+            <line x1="160" y1="146" x2="95" y2="175" stroke="#DC2626" stroke-width="1.5"/>
+            <rect x="14" y="165" width="102" height="26" rx="6" fill="#DC2626"/>
+            <text x="65" y="182" font-size="11" fill="#FFFFFF" font-weight="bold" text-anchor="middle">足三里（小腿前外）</text>
+          </svg>
+        `
+      },
+      {
+        id: 'shenmen',
+        category: 'sleep',
+        name: '神门穴（安神助眠、平复心烦焦虑）',
+        meridian: '手少阴心经 · 原穴',
+        targetSymptoms: '入睡困难、多梦易醒、心慌心悸、工作压力大心烦焦虑',
+        locationGuide: '【一秒找准法】掌心朝上，看手腕最靠近手掌的那条横纹，顺着小拇指往下摸到腕横纹处，能摸到一根硬硬的肌腱（尺侧腕屈肌腱），就在这根肌腱内侧（靠大拇指一侧）的凹陷里。',
+        method: '睡前躺在床上，用另一只手大拇指指腹轻轻掐按神门穴，配合缓慢深呼吸，左右手各按 3 分钟，有明显的困意感。',
+        caution: '睡前按揉宜轻柔缓和，切忌暴力快搓导致神经兴奋。',
+        svgDiagram: `
+          <svg viewBox="0 0 320 240" class="w-full h-56 bg-[#FAF8F5] rounded-xl border border-[#E2DCD0]">
+            <!-- 掌心朝上手腕轮廓 -->
+            <path d="M115,225 L120,135 L95,95 Q88,85 96,80 Q104,76 112,88 L125,108 L128,45 Q130,35 138,36 Q145,37 144,48 L144,100 L154,38 Q156,28 164,29 Q171,30 169,42 L166,100 L178,46 Q180,36 187,38 Q194,40 191,52 L184,106 L198,65 Q201,56 208,59 Q214,62 210,73 L194,135 L190,225 Z" fill="#F2E6D8" stroke="#8C7A5B" stroke-width="2"/>
+            <!-- 腕横纹 -->
+            <line x1="120" y1="138" x2="194" y2="138" stroke="#8C7A5B" stroke-width="1.5"/>
+            <text x="78" y="142" font-size="10" fill="#6E7872">腕横纹</text>
+            <!-- 神门穴红点（小指侧腕横纹凹陷） -->
+            <circle cx="182" cy="138" r="11" fill="#DC2626" fill-opacity="0.25" class="pulse-point"/>
+            <circle cx="182" cy="138" r="5" fill="#DC2626" stroke="#FFFFFF" stroke-width="2"/>
+            <line x1="182" y1="138" x2="225" y2="168" stroke="#DC2626" stroke-width="1.5"/>
+            <rect x="200" y="162" width="108" height="26" rx="6" fill="#DC2626"/>
+            <text x="254" y="179" font-size="11" fill="#FFFFFF" font-weight="bold" text-anchor="middle">神门穴（小指侧腕纹）</text>
+          </svg>
+        `
+      }
+    ];
+
+    /********************************************************************
+     * 3. 核心数据仓库：八部金刚功全套八式
+     ********************************************************************/
+    const JINGANG_MOVES = [
+      {
+        num: '第一部',
+        name: '双手插顶利三焦',
+        organ: '疏通上、中、下三焦水道与气机',
+        steps: '两脚与肩同宽站立，两手在腹前十指交叉，掌心向上缓慢托至胸前；随后翻掌向下压至小腹，再翻掌向上极力托举过头顶，同时两脚跟尽量提起离地，全身上下拔伸到极致，略停2秒后脚跟落地、两手从两侧划弧放下。',
+        keyPoint: '关键点：用力不用拙力，托顶时要像要把头顶天花板顶破一样拔伸，把久坐挤压的胸腹腔彻底拉开。'
+      },
+      {
+        num: '第二部',
+        name: '手足前后固肾腰',
+        organ: '强肾固腰、疏通膀胱经与督脉',
+        steps: '左脚向前迈出一步成前弓步，两手合掌从胸前向上举起、向后仰身拉伸；随后两手分开向下划弧，顺着左腿两侧一直摸到脚尖（膝盖尽量挺直），停留2秒感受后腰与腿后侧拉伸，再起身换右脚向前重复。',
+        keyPoint: '关键点：低头弯腰摸脚尖时，腿后侧膀胱经会有强烈酸胀拉伸感，切忌憋气，动作慢而沉稳。'
+      },
+      {
+        num: '第三部',
+        name: '调理脾肤需单举',
+        organ: '健脾胃、祛湿气、改善皮肤出油与湿疹',
+        steps: '左手掌心朝上从腰间向上托举过头顶（指尖朝右），同时右手掌心朝下用力向地面按压（指尖朝前），一上一下形成对拉拔伸之势；停留2秒后两手在胸前交替，换右手上托、左手下按。',
+        keyPoint: '关键点：脾胃一升一降，左右单举正是模拟脾气上升、胃气下降，对胃胀、湿气重极有效。'
+      },
+      {
+        num: '第四部',
+        name: '左肝右肺如射雕',
+        organ: '疏肝理气（左）与宣肺清气（右）',
+        steps: '两脚开立比肩宽，屈膝下蹲成马步。左手握空拳拉弓，右手如推弓箭般向左前方推出，眼睛紧盯右手食指，两臂用力拉开；随后收回换另一侧向右侧拉弓射雕。',
+        keyPoint: '关键点：中医讲“肝气升于左，肺气降于右”，拉弓时扩胸开背，专门化解现代人胸闷气短、爱叹气。'
+      },
+      {
+        num: '第五部',
+        name: '回头望足去心疾',
+        organ: '降心火、交通心肾、缓解失眠心悸',
+        steps: '左脚向左前方迈半步，身体向左后方极力扭转，右手向下往左脚后跟方向伸去，同时转头用眼睛紧紧盯着左脚后跟，左手向左上后方举起；恢复站立后换右侧重复。',
+        keyPoint: '关键点：扭转到极限时停顿2秒，眼睛一定要看到脚后跟，能把浮在头顶的虚火引回肾水之中。'
+      },
+      {
+        num: '第六部',
+        name: '五劳七伤向后瞧',
+        organ: '调理五脏积劳、修复低头族颈椎',
+        steps: '两脚与肩同宽自然站立，两手五指并拢贴于大腿外侧；双肩保持不动，头部缓慢向左后方转动，眼睛尽量往正后方看，停留2秒后缓慢回正，再向右后方转动瞧看。',
+        keyPoint: '关键点：身子绝不跟着转，只转脖子与眼睛，能极大缓解颈椎僵硬与用眼过度。'
+      },
+      {
+        num: '第七部',
+        name: '凤凰展翅周身力',
+        organ: '打通带脉与全身经络、活血化瘀',
+        steps: '两脚开立较宽，两臂向左右平举如大鹏展翅；上身前俯，右手向左脚尖方向点去，左手向后上方高举，眼睛看左手；随后起身左右交替展翅点脚。',
+        keyPoint: '关键点：动作舒展大方，带动腰腹带脉大幅度扭转，最能消除腰腹赘肉与寒湿瘀堵。'
+      },
+      {
+        num: '第八部',
+        name: '两足顿顿饮嗜消',
+        organ: '震动全身经脉、消除饮食积滞、收功归元',
+        steps: '两脚并拢站直，两手自然下垂贴腿侧，全身放松；两脚跟缓缓提起离地尽量高，然后身体保持正直，脚跟轻轻向下顿地（震动感从脚底直传头顶）。最后做三次深呼吸收功。',
+        keyPoint: '关键点：顿地时牙齿要轻轻咬合（防止震到舌头），力度适中，把全身气血震荡归位。'
+      }
+    ];
+
+    /********************************************************************
+     * 4. 页面初始化与模块渲染
+     ********************************************************************/
+    let selectedAcupointId = 'hegu';
+    let jingangTimer = null;
+
+    window.addEventListener('DOMContentLoaded', () => {
+      switchSection('illness');
+      renderIllnessCards('all');
+      renderAcupointList('all');
+      renderAcupointDetail('hegu');
+      renderJingangMoves();
+    });
+
+    function switchSection(secId) {
+      const allSecs = ['illness', 'acupoints', 'jingang', 'triage'];
+      allSecs.forEach(id => {
+        const card = document.getElementById(`nav-${id}`);
+        const sec = document.getElementById(`sec-${id}`);
+        if (id === secId) {
+          card.classList.add('border-[#2C5E4F]', 'ring-2', 'ring-[#2C5E4F]/20', 'bg-[#F4F8F6]');
+          card.classList.remove('border-[#E5DFD3]');
+          sec.classList.remove('hidden');
+        } else {
+          card.classList.remove('border-[#2C5E4F]', 'ring-2', 'ring-[#2C5E4F]/20', 'bg-[#F4F8F6]');
+          card.classList.add('border-[#E5DFD3]');
+          sec.classList.add('hidden');
+        }
+      });
+    }
+
+    // 渲染病症卡片
+    function renderIllnessCards(filterCat) {
+      const grid = document.getElementById('illnessCardsGrid');
+      const list = filterCat === 'all' ? ILLNESS_DATA : ILLNESS_DATA.filter(i => i.category === filterCat);
+
+      grid.innerHTML = list.map(item => `
+        <article class="bg-white rounded-2xl border border-[#E5DFD3] p-5 shadow-sm flex flex-col justify-between space-y-4">
+          <div class="space-y-3">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <span class="inline-block text-[11px] font-semibold px-2.5 py-0.5 rounded-full ${item.tagColor}">${item.tag}</span>
+                <h3 class="text-base font-bold text-[#1E2923] mt-1.5">${item.title}</h3>
+              </div>
+              <button onclick="speakText('${escapeAttr(item.title + '。' + item.coreLogic + '。正确做法是：' + item.rightWay + '。注意避坑：' + item.wrongPitfall)}')"
+                class="shrink-0 inline-flex items-center gap-1 bg-[#2C5E4F]/10 hover:bg-[#2C5E4F] text-[#2C5E4F] hover:text-white text-xs font-semibold px-3 py-1.5 rounded-xl transition">
+                <span>🔊 语音讲解</span>
+              </button>
+            </div>
+
+            <div class="bg-[#FAF8F5] border border-[#EAE3D5] rounded-xl p-3 text-xs leading-relaxed text-[#333D38]">
+              <span class="font-bold text-[#2C5E4F]">💡 底层医理拆解：</span>${item.coreLogic}
+            </div>
+
+            <div class="text-xs space-y-1">
+              <div class="font-bold text-[#1E2923]">📌 典型表现核对：</div>
+              <ul class="list-disc list-inside text-[#5A655F] space-y-0.5">
+                ${item.symptoms.map(s => `<li>${s}</li>`).join('')}
+              </ul>
+            </div>
+
+            <div class="text-xs leading-relaxed text-[#1E2923] bg-emerald-50/60 border border-emerald-200/80 rounded-xl p-3">
+              <span class="font-bold text-emerald-900">✅ 居家正确调理：</span>${item.rightWay}
+            </div>
+          </div>
+
+          <div class="text-xs leading-relaxed text-rose-900 bg-rose-50/70 border border-rose-200/80 rounded-xl p-3">
+            ${item.wrongPitfall}
+          </div>
+        </article>
+      `).join('');
+    }
+
+    function filterIllness(cat) {
+      document.querySelectorAll('.illness-filter-btn').forEach(btn => {
+        btn.classList.remove('bg-[#2C5E4F]', 'text-white');
+        btn.classList.add('bg-[#F4F0E8]', 'text-[#3D4742]');
+      });
+      event.target.classList.remove('bg-[#F4F0E8]', 'text-[#3D4742]');
+      event.target.classList.add('bg-[#2C5E4F]', 'text-white');
+      renderIllnessCards(cat);
+    }
+
+    // 渲染穴位列表与详情图解
+    function renderAcupointList(cat) {
+      const box = document.getElementById('acupointList');
+      const list = cat === 'all' ? ACUPOINTS_DATA : ACUPOINTS_DATA.filter(a => a.category === cat);
+
+      box.innerHTML = list.map(a => {
+        const isSelected = a.id === selectedAcupointId;
+        return `
+          <button onclick="selectAcupoint('${a.id}')"
+            class="w-full text-left p-4 rounded-xl border-2 transition-all bg-white ${isSelected ? 'border-[#2C5E4F] bg-[#F4F8F6] shadow-sm' : 'border-[#E5DFD3] hover:border-[#B5C4BE]'}">
+            <div class="flex items-center justify-between">
+              <span class="text-sm font-bold text-[#1E2923]">${a.name}</span>
+              <span class="text-[11px] text-[#2C5E4F] font-medium">${a.meridian.split('·')[0]}</span>
+            </div>
+            <p class="text-xs text-[#647069] mt-1 line-clamp-1">主治：${a.targetSymptoms}</p>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function filterAcupoints(cat) {
+      document.querySelectorAll('.acu-filter').forEach(btn => {
+        btn.classList.remove('bg-[#2C5E4F]', 'text-white');
+        btn.classList.add('bg-[#F4F0E8]', 'text-[#3D4742]');
+      });
+      event.target.classList.remove('bg-[#F4F0E8]', 'text-[#3D4742]');
+      event.target.classList.add('bg-[#2C5E4F]', 'text-white');
+      const list = cat === 'all' ? ACUPOINTS_DATA : ACUPOINTS_DATA.filter(a => a.category === cat);
+      if (list.length > 0) {
+        selectedAcupointId = list[0].id;
+        renderAcupointDetail(selectedAcupointId);
+      }
+      renderAcupointList(cat);
+    }
+
+    function selectAcupoint(id) {
+      selectedAcupointId = id;
+      renderAcupointDetail(id);
+      renderAcupointList('all');
+    }
+
+    function renderAcupointDetail(id) {
+      const acu = ACUPOINTS_DATA.find(a => a.id === id) || ACUPOINTS_DATA[0];
+      const card = document.getElementById('acupointDetailCard');
+
+      card.innerHTML = `
+        <div class="space-y-4">
+          <div class="flex flex-wrap items-start justify-between gap-2 border-b border-[#EFEAE0] pb-3">
+            <div>
+              <h3 class="text-lg font-bold text-[#1E2923]">${acu.name}</h3>
+              <p class="text-xs text-[#2C5E4F] font-medium mt-0.5">${acu.meridian}</p>
+            </div>
+            <button onclick="speakText('${escapeAttr(acu.name + '。' + acu.locationGuide + '。按揉手法：' + acu.method + '。' + acu.caution)}')"
+              class="inline-flex items-center gap-1.5 bg-[#2C5E4F] hover:bg-[#21473B] text-white text-xs font-semibold px-3.5 py-2 rounded-xl shadow-sm transition">
+              <span>🔊 听找穴语音指导</span>
+            </button>
+          </div>
+
+          <!-- 矢量精准定位图 -->
+          <div>
+            ${acu.svgDiagram}
+          </div>
+
+          <div class="space-y-2.5 text-xs leading-relaxed">
+            <div class="p-3.5 rounded-xl bg-[#FAF8F5] border border-[#E5DFD3]">
+              <div class="font-bold text-[#1E2923] mb-1">🎯 精准定位口诀：</div>
+              <p class="text-[#3D4742]">${acu.locationGuide}</p>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-emerald-50/60 border border-emerald-200/80">
+              <div class="font-bold text-emerald-950 mb-1">👐 正确按揉手法：</div>
+              <p class="text-emerald-900">${acu.method}</p>
+            </div>
+
+            <div class="p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-950">
+              <strong>主治范围：</strong>${acu.targetSymptoms}
+            </div>
+
+            <div class="text-rose-700 font-medium px-1">
+              ${acu.caution}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // 渲染八部金刚功卡片
+    function renderJingangMoves() {
+      const grid = document.getElementById('jingangMovesGrid');
+      grid.innerHTML = JINGANG_MOVES.map((m, idx) => `
+        <div id="jingang-card-${idx}" class="bg-white rounded-2xl border-2 border-[#E5DFD3] p-5 shadow-sm space-y-3 transition-all">
+          <div class="flex items-center justify-between border-b border-[#EFEAE0] pb-2.5">
+            <div class="flex items-center gap-2">
+              <span class="bg-[#2C5E4F] text-white text-xs font-bold px-2.5 py-1 rounded-lg">${m.num}</span>
+              <h3 class="text-base font-bold text-[#1E2923]">${m.name}</h3>
+            </div>
+            <button onclick="speakText('${escapeAttr(m.num + '，' + m.name + '。功效：' + m.organ + '。动作分解：' + m.steps + '。' + m.keyPoint)}')"
+              class="text-xs bg-[#F4F0E8] hover:bg-[#2C5E4F] text-[#2C5E4F] hover:text-white font-semibold px-2.5 py-1 rounded-lg transition">
+              🔊 听口诀分解
+            </button>
+          </div>
+          <div class="text-xs font-semibold text-[#B8860B]">🌿 核心调理：${m.organ}</div>
+          <p class="text-xs text-[#3D4742] leading-relaxed">${m.steps}</p>
+          <div class="text-[11px] bg-[#FAF8F5] border border-[#E5DFD3] rounded-lg p-2.5 text-[#5A655F]">
+            ${m.keyPoint}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    /********************************************************************
+     * 5. 八部金刚功智能语音带练计时器
+     ********************************************************************/
+    function startJingangPractice() {
+      stopJingangPractice();
+      const roundsPerMove = parseInt(document.getElementById('jingangRoundsSelect').value, 10) || 5;
+      let moveIdx = 0;
+      let currentRound = 1;
+
+      const titleEl = document.getElementById('currentMoveTitle');
+      const countEl = document.getElementById('currentMoveCount');
+
+      function tick() {
+        if (moveIdx >= JINGANG_MOVES.length) {
+          titleEl.textContent = '🎉 全套八部金刚功练习圆满完成！';
+          countEl.textContent = '请静立调息三次，半小时内勿喝冷水、勿吹冷风';
+          speakText('全套八部金刚功练习圆满完成！请静立深呼吸三次，半小时内不要喝冷水，不要吹冷风。');
+          highlightJingangCard(-1);
+          clearInterval(jingangTimer);
+          jingangTimer = null;
+          return;
+        }
+
+        const move = JINGANG_MOVES[moveIdx];
+        highlightJingangCard(moveIdx);
+        titleEl.textContent = `${move.num}：${move.name}`;
+        countEl.textContent = `正在进行第 ${currentRound} / ${roundsPerMove} 遍 · 动作到位略停2秒`;
+
+        if (currentRound === 1) {
+          speakText(`${move.num}，${move.name}。第一遍，吸气拔伸，动作到位略停。`);
+        } else {
+          speakText(`第${currentRound}遍，起，落。`);
+        }
+
+        currentRound++;
+        if (currentRound > roundsPerMove) {
+          currentRound = 1;
+          moveIdx++;
+        }
+      }
+
+      tick();
+      jingangTimer = setInterval(tick, 6500);
+    }
+
+    function stopJingangPractice() {
+      if (jingangTimer) {
+        clearInterval(jingangTimer);
+        jingangTimer = null;
+      }
+      stopAllSpeech();
+      highlightJingangCard(-1);
+      document.getElementById('currentMoveTitle').textContent = '已停止练习 · 随时可重新开始';
+      document.getElementById('currentMoveCount').textContent = '自动语音报幕 + 呼吸节奏提示';
+    }
+
+    function highlightJingangCard(activeIdx) {
+      JINGANG_MOVES.forEach((_, idx) => {
+        const el = document.getElementById(`jingang-card-${idx}`);
+        if (!el) return;
+        if (idx === activeIdx) {
+          el.classList.add('border-[#D4A017]', 'ring-4', 'ring-[#D4A017]/25', 'bg-amber-50/30');
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+          el.classList.remove('border-[#D4A017]', 'ring-4', 'ring-[#D4A017]/25', 'bg-amber-50/30');
+        }
+      });
+    }
+
+    /********************************************************************
+     * 6. 症状辨证自测引擎
+     ********************************************************************/
+    function analyzeSymptoms() {
+      const checked = Array.from(document.querySelectorAll('.symptom-check:checked')).map(el => el.value);
+      const box = document.getElementById('triageResultBox');
+
+      if (checked.length === 0) {
+        alert('请先勾选至少一项您当前的身体信号！');
+        return;
+      }
+
+      const joined = checked.join(' ');
+      let diagnosisTitle = '日常亚健康气机不畅';
+      let analysis = '您当前的身体提示局部气血运行略显滞涩，重在疏通经络与调整作息。';
+      let teaRecipe = '陈皮 3g + 炒麦芽 10g + 干山楂 3片，开水冲泡代茶饮。';
+      let acuAdvice = '每天按揉【足三里】与【合谷穴】各 3 分钟。';
+      let gongfaAdvice = '推荐练习八部金刚功【第一部：双手插顶利三焦】与【第八部：两足顿顿饮嗜消】。';
+
+      if (joined.includes('怕冷') || joined.includes('清鼻涕') || joined.includes('无汗')) {
+        diagnosisTitle = '风寒束表证（典型受寒初期）';
+        analysis = '寒气锁住了体表毛孔，阳气被郁遏在里。此时切忌吃寒凉药物，必须趁早把体表寒气散出去！';
+        teaRecipe = '带皮生姜 3片 + 带须葱白 2根 + 红糖适量，大火煮沸5分钟趁热喝下，微微出汗即停。';
+        acuAdvice = '重点搓热后颈【风池穴】与低头颈后最高骨头下方的【大椎穴】，按揉鼻旁【迎香穴】。';
+        gongfaAdvice = '可练习八部金刚功【第四部：左肝右肺如射雕】宣发肺气，微微出微汗即可，练完立刻穿衣保暖。';
+      } else if (joined.includes('嗓子红肿') || joined.includes('黄浓涕')) {
+        diagnosisTitle = '风热犯肺证（肺胃有积热）';
+        analysis = '体内积热较盛，热邪上攻咽喉与鼻道，耗伤津液。重在清热利咽、疏散风热。';
+        teaRecipe = '霜桑叶 6g + 杭白菊 6g + 薄荷 3g + 胖大海 1颗，沸水焖泡饮用；多吃雪梨、白萝卜。';
+        acuAdvice = '重按虎口【合谷穴】清泄阳明经火气，配合按揉鼻翼【迎香穴】通鼻窍。';
+        gongfaAdvice = '练习【第五部：回头望足去心疾】，把浮在咽喉头面的虚火引下来。';
+      } else if (joined.includes('湿疹') || joined.includes('风团') || joined.includes('长痘')) {
+        diagnosisTitle = '脾虚湿盛 / 血分郁热倾向';
+        analysis = '皮肤表象的根源在于体内脾胃运化水湿能力下降，湿热或风邪顺着经络往体表顶出。';
+        teaRecipe = '炒薏米 15g + 赤小豆 15g + 茯苓 10g 煮水喝（健脾利湿）；严格戒除冰饮、甜食与海鲜牛羊肉发物。';
+        acuAdvice = '每日必按小腿内侧【足三里】祛湿健脾，按揉【合谷穴】清面部分布之火。';
+        gongfaAdvice = '重点练习【第三部：调理脾肤需单举】——张至顺道长明确指出此式专调脾胃与皮肤疾患！';
+      } else if (joined.includes('胃胀') || joined.includes('粘马桶')) {
+        diagnosisTitle = '中焦脾胃湿阻证';
+        analysis = '长期久坐、饮食不规律导致脾胃升降失调，水湿停聚中焦。';
+        teaRecipe = '陈皮 5g + 茯苓 10g + 生姜 2片煮水，温中健脾化湿。';
+        acuAdvice = '顺时针摩腹 5 分钟，重按双腿【足三里】。';
+        gongfaAdvice = '每日坚持练习【第一部：双手插顶利三焦】与【第三部：调理脾肤需单举】。';
+      } else if (joined.includes('入睡困难') || joined.includes('多梦')) {
+        diagnosisTitle = '心肾不交 / 虚火上浮证';
+        analysis = '白天思虑过度耗伤心阴，肾水不能上济心火，导致夜晚心神不宁。';
+        teaRecipe = '百合 10g + 莲子（带芯）6g + 酸枣仁 10g 煮水睡前1小时饮用。';
+        acuAdvice = '睡前温水泡脚后，按揉手腕内侧【神门穴】各 3 分钟，搓热脚心。';
+        gongfaAdvice = '睡前2小时可轻柔练习【第五部：回头望足去心疾】与【第六部：五劳七伤向后瞧】。';
+      }
+
+      box.classList.remove('hidden');
+      box.innerHTML = `
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#DCD3C2] pb-2.5">
+          <div>
+            <span class="text-[11px] font-semibold text-[#2C5E4F]">辨证参考方向：</span>
+            <h3 class="text-base font-bold text-[#1E2923]">${diagnosisTitle}</h3>
+          </div>
+          <button onclick="speakText('${escapeAttr('辨证参考方向：' + diagnosisTitle + '。' + analysis + '。推荐茶饮：' + teaRecipe + '。推荐穴位：' + acuAdvice + '。推荐功法：' + gongfaAdvice)}')"
+            class="bg-[#2C5E4F] text-white text-xs font-semibold px-3 py-1.5 rounded-xl">
+            🔊 语音播报完整方案
+          </button>
+        </div>
+        <p class="text-xs text-[#3D4742] leading-relaxed">${analysis}</p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+          <div class="bg-white p-3.5 rounded-xl border border-[#E5DFD3]">
+            <div class="font-bold text-[#2C5E4F] mb-1">🍵 食疗茶饮建议</div>
+            <p class="text-[#4A544E] leading-relaxed">${teaRecipe}</p>
+          </div>
+          <div class="bg-white p-3.5 rounded-xl border border-[#E5DFD3]">
+            <div class="font-bold text-[#2C5E4F] mb-1">📍 重点按揉穴位</div>
+            <p class="text-[#4A544E] leading-relaxed">${acuAdvice}</p>
+          </div>
+          <div class="bg-white p-3.5 rounded-xl border border-[#E5DFD3]">
+            <div class="font-bold text-[#2C5E4F] mb-1">🧘 配套金刚功法</div>
+            <p class="text-[#4A544E] leading-relaxed">${gongfaAdvice}</p>
+          </div>
+        </div>
+      `;
+    }
+
+    function resetSymptoms() {
+      document.querySelectorAll('.symptom-check').forEach(cb => cb.checked = false);
+      document.getElementById('triageResultBox').classList.add('hidden');
+    }
+
+    /********************************************************************
+     * 7. 浏览器原生中文 AI 语音合成朗读引擎 (TTS)
+     ********************************************************************/
+    function speakText(text) {
+      if (!('speechSynthesis' in window)) {
+        alert('当前浏览器暂不支持语音朗读功能，建议使用 Chrome、Edge 或 Safari 浏览器。');
+        return;
+      }
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'zh-CN';
+      utterance.rate = 0.96;
+      utterance.pitch = 1.0;
+
+      const stopBtn = document.getElementById('globalStopAudioBtn');
+      utterance.onstart = () => stopBtn.classList.remove('hidden');
+      utterance.onend = () => stopBtn.classList.add('hidden');
+      utterance.onerror = () => stopBtn.classList.add('hidden');
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function stopAllSpeech() {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+      document.getElementById('globalStopAudioBtn').classList.add('hidden');
+    }
+
+    function escapeAttr(str) {
+      return String(str ?? '').replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/\n/g, ' ');
+    }
+  </script>
+</body>
+</html>
