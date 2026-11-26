@@ -1,0 +1,19 @@
+name: "问题反馈 / 功能建议"
+description: 报告页面显示问题、错误描述或提出新功能想法
+title: "[反馈] "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: 问题描述或改进建议
+      placeholder: 请描述你在手机或电脑上遇到的问题，或希望新增的功能...
+    validations:
+      required: true
+  - type: dropdown
+    id: device
+    attributes:
+      label: 使用设备
+      options:
+        - 手机浏览器 (iOS / Android)
+        - 电脑浏览器 (Chrome / Edge / Safari)
