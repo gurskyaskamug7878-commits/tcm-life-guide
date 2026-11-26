@@ -1,0 +1,43 @@
+name: Daily Health Check & Safety Reminder
+
+on:
+  schedule:
+    # 每天北京时间 08:00 (UTC 00:00) 自动执行一次可用性与数据完整性巡检
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  check-site-and-data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Verify required project files exist
+        run: |
+          test -f index.html || (echo "Missing index.html" && exit 1)
+          test -f data.js || (echo "Missing data.js" && exit 1)
+          test -f README.md || (echo "Missing README.md" && exit 1)
+          echo "✅ All core static files verified."
+
+      - name: Check Medical Disclaimer & Safety Keywords
+        run: |
+          grep -q "免责声明" index.html || (echo "Missing medical disclaimer in index.html" && exit 1)
+          grep -q "孕妇" data.js || (echo "Missing pregnancy contraindication in data.js" && exit 1)
+          echo "✅ Medical safety disclaimers verified."
+
+      - name: Check Live GitHub Pages Availability
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://gurskyaskamug7878-commits.github.io/tcm-life-guide/ || echo "000")
+          echo "Live Demo HTTP Status: $STATUS"
+          if [ "$STATUS" != "200" ]; then
+            echo "⚠️ Warning: GitHub Pages returned status $STATUS (may still be building or network transient)."
+          else
+            echo "✅ GitHub Pages Demo is online and healthy (HTTP 200)."
+          fi
+
+      - name: Check Recent Changelog Update Status
+        run: |
+          LAST_COMMIT_DATE=$(git log -1 --format=%cd --date=short)
+          echo "📅 Latest repository update: $LAST_COMMIT_DATE"
+          echo "💡 Reminder: Review open Issues/Discussions weekly to merge community acupoint contributions."
