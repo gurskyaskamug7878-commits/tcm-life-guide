@@ -1,0 +1,40 @@
+name: ➕ 贡献新穴位 / 病症科普词条
+description: 向知常中医补充新的经络穴位定位法或常见病痛居家养护知识
+title: "[内容贡献] "
+labels: ["enhancement", "content-contribution"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢你为开源中医科普贡献力量！请填写以下信息（无需写代码，维护者会帮你合并进 `data.js`）。
+  - type: dropdown
+    id: entry_type
+    attributes:
+      label: 贡献类型
+      options:
+        - 新增经络穴位
+        - 新增常见病痛辨证科普
+        - 补充食疗茶饮 / 功法细节
+    validations:
+      required: true
+  - type: input
+    id: entry_name
+    attributes:
+      label: 穴位名称 / 病症标题
+      placeholder: 例如：阴陵泉穴（健脾祛湿第一要穴）
+    validations:
+      required: true
+  - type: textarea
+    id: location_or_logic
+    attributes:
+      label: 一秒找准法 / 核心医理拆解（请用普通人听得懂的大白话）
+      placeholder: 例如：顺着小腿内侧胫骨往上摸，到膝盖内侧下方骨头拐弯凹陷处...
+    validations:
+      required: true
+  - type: textarea
+    id: method_and_caution
+    attributes:
+      label: 按揉手法与重要禁忌（必填）
+      placeholder: 例如：每天按揉5分钟；孕妇或局部皮肤破溃处禁用。
+    validations:
+      required: true
